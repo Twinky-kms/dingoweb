@@ -1,0 +1,21 @@
+# Use an official Node.js runtime as the base image
+FROM node:14.21.3-alpine 
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json and yarn.lock to the working directory
+COPY package.json /app/package.json
+COPY yarn.lock  /app/yarn.lock
+
+# Install the project dependencies using Yarn
+RUN yarn install
+
+# Copy the entire project to the working directory
+COPY --from=build /app .
+
+# Build the React app for production
+RUN yarn build
+
+# Specify the command to run when the container starts
+CMD [ "yarn", "start" ]
